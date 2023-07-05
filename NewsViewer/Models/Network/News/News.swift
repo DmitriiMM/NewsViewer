@@ -7,6 +7,7 @@ struct News: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         title = try container.decode(String.self, forKey: .title)
+        link = try container.decode(String.self, forKey: .link)
         creator = try container.decode([String]?.self, forKey: .creator)
         content = try container.decode(String.self, forKey: .content)
         pubDate = try container.decode(String.self, forKey: .pubDate)
@@ -14,6 +15,7 @@ struct News: Decodable {
     }
     
     let title: String
+    let link: String
     let creator: [String]?
     let content: String
     let pubDate: String
@@ -21,6 +23,7 @@ struct News: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case title = "title"
+        case link = "link"
         case creator = "creator"
         case content = "content"
         case pubDate = "pubDate"

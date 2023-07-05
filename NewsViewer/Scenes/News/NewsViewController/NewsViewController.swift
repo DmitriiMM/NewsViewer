@@ -84,6 +84,10 @@ class NewsViewController: UIViewController {
 extension NewsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let news = news[indexPath.row]
+        let detailVC = DetailNewsViewController(news: news)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 

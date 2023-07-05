@@ -36,6 +36,8 @@
 		A381AFC22A55AD0700261E4C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A381AFC12A55AD0700261E4C /* Localizable.strings */; };
 		A381AFC42A55AD8E00261E4C /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A381AFC32A55AD8E00261E4C /* String+Extensions.swift */; };
 		A381AFC92A55CE6400261E4C /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = A381AFC82A55CE6400261E4C /* keys.plist */; };
+		A381AFCC2A5603A900261E4C /* DetailNewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A381AFCB2A5603A900261E4C /* DetailNewsViewController.swift */; };
+		A381AFD12A561B9500261E4C /* NewsResourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A381AFD02A561B9500261E4C /* NewsResourceViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +70,8 @@
 		A381AFC12A55AD0700261E4C /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		A381AFC32A55AD8E00261E4C /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		A381AFC82A55CE6400261E4C /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
+		A381AFCB2A5603A900261E4C /* DetailNewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailNewsViewController.swift; sourceTree = "<group>"; };
+		A381AFD02A561B9500261E4C /* NewsResourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsResourceViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,8 +122,8 @@
 			isa = PBXGroup;
 			children = (
 				A381AF852A553D9800261E4C /* TabBarController.swift */,
-				A381AF892A553E3900261E4C /* NewsViewController */,
-				A381AF8A2A553E4D00261E4C /* FavoriteViewController */,
+				A381AFCD2A5603B600261E4C /* News */,
+				A381AFCE2A5603C100261E4C /* Favorite */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -254,6 +258,40 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		A381AFCA2A56037F00261E4C /* DetailNewsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A381AFCB2A5603A900261E4C /* DetailNewsViewController.swift */,
+			);
+			path = DetailNewsViewController;
+			sourceTree = "<group>";
+		};
+		A381AFCD2A5603B600261E4C /* News */ = {
+			isa = PBXGroup;
+			children = (
+				A381AF892A553E3900261E4C /* NewsViewController */,
+				A381AFCA2A56037F00261E4C /* DetailNewsViewController */,
+				A381AFCF2A561B6400261E4C /* NewsResourceViewController */,
+			);
+			path = News;
+			sourceTree = "<group>";
+		};
+		A381AFCE2A5603C100261E4C /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				A381AF8A2A553E4D00261E4C /* FavoriteViewController */,
+			);
+			path = Favorite;
+			sourceTree = "<group>";
+		};
+		A381AFCF2A561B6400261E4C /* NewsResourceViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A381AFD02A561B9500261E4C /* NewsResourceViewController.swift */,
+			);
+			path = NewsResourceViewController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -339,6 +377,7 @@
 			files = (
 				A381AFC42A55AD8E00261E4C /* String+Extensions.swift in Sources */,
 				A381AFAB2A5598AE00261E4C /* DateHelper.swift in Sources */,
+				A381AFD12A561B9500261E4C /* NewsResourceViewController.swift in Sources */,
 				A381AF972A5554F000261E4C /* NewsLoadService.swift in Sources */,
 				A381AF6D2A553A2400261E4C /* AppDelegate.swift in Sources */,
 				A381AFB82A55A2EC00261E4C /* UIColor+Extension.swift in Sources */,
@@ -350,6 +389,7 @@
 				A381AFC02A55AB3400261E4C /* UIBlockingProgressHUD.swift in Sources */,
 				A381AF992A55550500261E4C /* NewsLoadProtocol.swift in Sources */,
 				A381AFA42A555EB100261E4C /* UImageView+Extensions.swift in Sources */,
+				A381AFCC2A5603A900261E4C /* DetailNewsViewController.swift in Sources */,
 				A381AF862A553D9800261E4C /* TabBarController.swift in Sources */,
 				A381AFA92A5561CA00261E4C /* NetworkClient.swift in Sources */,
 				A381AFAD2A559FDF00261E4C /* UIViewController+Extensions.swift in Sources */,
