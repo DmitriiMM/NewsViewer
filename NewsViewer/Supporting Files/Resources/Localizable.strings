@@ -1,0 +1,11 @@
+//MARK: - Tab Bar
+"tabBar.news" = "Новости";
+"tabBar.favorite" = "Избранное";
+
+
+//MARK: - News VC
+"news.news_vc.error_message" = "Что-то пошло не так 😢";
+
+//MARK: - All modules
+"all_modules.error_dialog.error" = "Ошибка!";
+"all_modules.error_dialog.ok" = "Ок";
