@@ -4,7 +4,7 @@ class NewsViewController: UIViewController {
     private let newsLoadService = NewsLoadService()
     private var news: [News] = []
     
-    private lazy var tableView: UITableView = {
+     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(NewsCell.self, forCellReuseIdentifier: NewsCell.identifier)
         tableView.delegate = self
@@ -32,10 +32,10 @@ class NewsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
         
-        DispatchQueue.main.async {
-            self.loadData()
-        }
+        title = "tabBar.news".localized
+        navigationController?.navigationBar.prefersLargeTitles = true
         
+        loadData()
         addSubViews()
         addConstraints()
     }
@@ -46,7 +46,6 @@ class NewsViewController: UIViewController {
     }
   
     private func addConstraints() {
-       
         tableView.translatesAutoresizingMaskIntoConstraints = false
         emptyTableLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -63,7 +62,13 @@ class NewsViewController: UIViewController {
         ])
     }
     
-    private func loadData() {
+    func showDetailVC(for news: News) {
+        let detailVC = DetailNewsViewController(news: news)
+        detailVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    func loadData() {
         UIBlockingProgressHUD.show()
         newsLoadService.getNews(onCompletion: { [weak self] result in
             DispatchQueue.main.async {
@@ -83,11 +88,7 @@ class NewsViewController: UIViewController {
 
 extension NewsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        let news = news[indexPath.row]
-        let detailVC = DetailNewsViewController(news: news)
-        navigationController?.pushViewController(detailVC, animated: true)
+        showDetailVC(for: news[indexPath.row])
     }
 }
 

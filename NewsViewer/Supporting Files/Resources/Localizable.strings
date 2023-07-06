@@ -6,6 +6,10 @@
 //MARK: - News VC
 "news.news_vc.error_message" = "Что-то пошло не так 😢";
 
+//MARK: - Detail VC
+"news.detail_vc.fail_add_news" = "Не удалось добавить новость: ";
+"news.detail_vc.fail_delete_news" = "Не удалось удалить новость: ";
+
 //MARK: - All modules
 "all_modules.error_dialog.error" = "Ошибка!";
 "all_modules.error_dialog.ok" = "Ок";

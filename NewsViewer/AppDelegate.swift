@@ -1,16 +1,18 @@
-//
-//  AppDelegate.swift
-//  NewsViewer
-//
-//  Created by Дмитрий Мартынов on 05.07.2023.
-//
-
+import CoreData
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "NewsModel")
+        container.loadPersistentStores { store, error in
+            if let error = error as NSError? {
+                print(error)
+            }
+        }
+        return container
+    }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

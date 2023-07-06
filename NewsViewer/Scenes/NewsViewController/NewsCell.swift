@@ -114,7 +114,7 @@ final class NewsCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             newsImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            newsImageView.heightAnchor.constraint(equalToConstant: contentView.frame.width / 3),
+            newsImageView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 5),
             newsImageView.widthAnchor.constraint(equalTo: newsImageView.heightAnchor),
             newsImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             

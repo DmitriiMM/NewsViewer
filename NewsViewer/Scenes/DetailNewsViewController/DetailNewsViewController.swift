@@ -2,10 +2,12 @@ import UIKit
 
 final class DetailNewsViewController: UIViewController {
     private let news: News
+    private let newsStore = NewsStore()
     
     private lazy var newsImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         
         return imageView
     }()
@@ -22,6 +24,7 @@ final class DetailNewsViewController: UIViewController {
         let button = UIButton(type: .system)
         button.titleLabel?.font = UIFont.appFont(.regular, withSize: 14)
         button.addTarget(self, action: #selector(newsSourceLinkButtonTapped), for: .touchUpInside)
+        button.contentHorizontalAlignment = .left
         
         return button
     }()
@@ -36,6 +39,7 @@ final class DetailNewsViewController: UIViewController {
         textView.textAlignment = .left
         textView.textColor = .textColor
         textView.backgroundColor = .contentBgColor
+        textView.textContainerInset.bottom = 30
         
         return textView
     }()
@@ -57,6 +61,18 @@ final class DetailNewsViewController: UIViewController {
         addSubViews()
         addConstraints()
         config()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        DispatchQueue.main.async {
+            self.navigationController?.navigationBar.prefersLargeTitles = false
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     private func config() {
@@ -92,17 +108,50 @@ final class DetailNewsViewController: UIViewController {
     
     private func setupRightBarButton() {
         let addToFavoriteButton = UIBarButtonItem(
-            image: UIImage(systemName: "bookmark"),
+            title: nil,
             style: .plain,
             target: self,
             action: #selector(addToFavoriteButtonTapped)
         )
         
+        let favoriteNews = newsStore.news
+        DispatchQueue.main.async {
+            if !favoriteNews.contains(where: { $0.title == self.news.title }) {
+                let image = UIImage(systemName: "bookmark")
+                addToFavoriteButton.image = image
+            } else {
+                let image = UIImage(systemName: "bookmark.fill")
+                addToFavoriteButton.image = image
+            }
+        }
+        
         navigationItem.rightBarButtonItem = addToFavoriteButton
     }
     
     @objc private func addToFavoriteButtonTapped() {
+        if !newsStore.news.contains(where: { $0 == news }) {
+            addToFavorite(news)
+        } else {
+            deleteFromFavorite(news)
+        }
+    }
+    
+    private func addToFavorite(_ news: News) {
         navigationItem.rightBarButtonItem?.image = UIImage(systemName: "bookmark.fill")
+        do {
+            try newsStore.addNews(news)
+        } catch {
+            presentErrorDialog(message: "news.detail_vc.fail_add_news".localized + error.localizedDescription)
+        }
+    }
+    
+    private func deleteFromFavorite(_ news: News) {
+        navigationItem.rightBarButtonItem?.image = UIImage(systemName: "bookmark")
+        do {
+            try newsStore.delete(news: news)
+        } catch {
+            presentErrorDialog(message: "news.detail_vc.fail_delete_news".localized + error.localizedDescription)
+        }
     }
     
     private func addSubViews() {
@@ -135,7 +184,7 @@ final class DetailNewsViewController: UIViewController {
             newsDescription.topAnchor.constraint(equalTo: newsSourceLinkButton.bottomAnchor, constant: 2),
             newsDescription.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
             newsDescription.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
-            newsDescription.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            newsDescription.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
 }
