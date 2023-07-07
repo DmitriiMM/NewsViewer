@@ -31,6 +31,8 @@ final class FavoriteViewController: NewsViewController {
         
         return cell
     }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) { }
 }
 
 extension FavoriteViewController: NewsStoreDelegate {

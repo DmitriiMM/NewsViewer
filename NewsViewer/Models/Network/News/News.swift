@@ -1,5 +1,6 @@
 struct NewsResult: Decodable {
     let results: [News]
+    let nextPage: String?
 }
 
 struct News: Decodable, Equatable {

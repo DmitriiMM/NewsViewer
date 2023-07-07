@@ -5,6 +5,7 @@
 
 //MARK: - News VC
 "news.news_vc.error_message" = "Что-то пошло не так 😢";
+"news.news_vc.null_next_page" = "Похоже, новостей больше нет 😢";
 
 //MARK: - Detail VC
 "news.detail_vc.fail_add_news" = "Не удалось добавить новость: ";

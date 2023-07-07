@@ -3,6 +3,8 @@ import UIKit
 class NewsViewController: UIViewController {
     private let newsLoadService = NewsLoadService()
     private var news: [News] = []
+    private var isScrolledToEnd = false
+    private var nextPage: String?
     
      lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -74,6 +76,7 @@ class NewsViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let newsResult):
+                    self?.nextPage = newsResult.nextPage
                     self?.news = newsResult.results
                     self?.tableView.reloadData()
                 case .failure(let error):
@@ -84,11 +87,49 @@ class NewsViewController: UIViewController {
             }
         })
     }
+    
+    private func loadData(for nextPage: String) {
+        newsLoadService.getNews(for: nextPage) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let newsResult):
+                    self?.isScrolledToEnd = false
+                    self?.nextPage = newsResult.nextPage
+                    let oldCountNews = self?.news.count ?? 0
+                    self?.news.append(contentsOf: newsResult.results)
+                    self?.tableView.performBatchUpdates({
+                        let indexPaths = (oldCountNews ..< (oldCountNews + newsResult.results.count)).map { IndexPath(row: $0, section: 0) }
+                        self?.tableView.insertRows(at: indexPaths, with: .automatic)
+                    }, completion: nil)
+                case .failure(let error):
+                    self?.presentErrorDialog(message: error.localizedDescription)
+                }
+            }
+        }
+    }
 }
 
 extension NewsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showDetailVC(for: news[indexPath.row])
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let height = scrollView.frame.size.height
+        
+        if !isScrolledToEnd && offsetY > 0 && offsetY + height >= contentHeight {
+            isScrolledToEnd = true
+            
+            if let nextPage = nextPage {
+                DispatchQueue.main.async {
+                    self.loadData(for: nextPage)
+                }
+            } else {
+                presentErrorDialog(message: "news.news_vc.null_next_page".localized)
+            }
+        }
     }
 }
 
