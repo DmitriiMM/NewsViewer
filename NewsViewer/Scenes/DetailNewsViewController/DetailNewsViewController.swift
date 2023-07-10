@@ -56,23 +56,12 @@ final class DetailNewsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .contentBgColor
+        navigationItem.largeTitleDisplayMode = .never
         
         setupRightBarButton()
         addSubViews()
         addConstraints()
         config()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        DispatchQueue.main.async {
-            self.navigationController?.navigationBar.prefersLargeTitles = false
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     private func config() {
@@ -102,7 +91,7 @@ final class DetailNewsViewController: UIViewController {
     }
     
     @objc private func newsSourceLinkButtonTapped() {
-        let newsResourceVC = NewsResourceViewController(link: news.link)
+        let newsResourceVC = NewsResourceWebViewController(link: news.link)
         navigationController?.pushViewController(newsResourceVC, animated: true)
     }
     

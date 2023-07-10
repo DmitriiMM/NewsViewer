@@ -1,9 +1,12 @@
 import UIKit
 import WebKit
 
-final class NewsResourceViewController: UIViewController {
+final class NewsResourceWebViewController: UIViewController {
     private let link: String
-    private let webView = WKWebView()
+    private var estimatedProgressObservation: NSKeyValueObservation?
+    
+    private lazy var webView = WKWebView()
+    private lazy var progressView = UIProgressView()
     
     init(link: String) {
         self.link = link
@@ -17,15 +20,31 @@ final class NewsResourceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
+        navigationItem.largeTitleDisplayMode = .never
         
+        observeProgress()
         addSubViews()
         addConstraints()
         configWebView(with: link)
     }
     
+    private func observeProgress() {
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             }
+        )
+    }
+    
+    private func updateProgress() {
+        progressView.progress = Float(webView.estimatedProgress)
+        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    }
+    
     private func configWebView(with urlString: String) {
-        webView.navigationDelegate = self
-        UIBlockingProgressHUD.show()
         DispatchQueue.main.async { [weak self] in
             guard let self, let url = URL(string: urlString) else { return }
             let request = URLRequest(url: url)
@@ -35,22 +54,23 @@ final class NewsResourceViewController: UIViewController {
     
     private func addSubViews() {
         view.addSubview(webView)
+        view.addSubview(progressView)
     }
     
     private func addConstraints() {
         webView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            progressView.heightAnchor.constraint(equalToConstant: 3),
         ])
-    }
-}
-
-extension NewsResourceViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        UIBlockingProgressHUD.dismiss()
     }
 }
