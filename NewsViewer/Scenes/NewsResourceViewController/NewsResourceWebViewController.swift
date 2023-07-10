@@ -2,14 +2,18 @@ import UIKit
 import WebKit
 
 final class NewsResourceWebViewController: UIViewController {
-    private let link: String
     private var estimatedProgressObservation: NSKeyValueObservation?
     
-    private lazy var webView = WKWebView()
-    private lazy var progressView = UIProgressView()
+    private var webView: WKWebView
+    private lazy var progressView: UIProgressView = {
+        let progressView = UIProgressView()
+        progressView.isHidden = true
+        
+        return progressView
+    }()
     
-    init(link: String) {
-        self.link = link
+    init(webView: WKWebView) {
+        self.webView = webView
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -25,7 +29,6 @@ final class NewsResourceWebViewController: UIViewController {
         observeProgress()
         addSubViews()
         addConstraints()
-        configWebView(with: link)
     }
     
     private func observeProgress() {
@@ -40,16 +43,9 @@ final class NewsResourceWebViewController: UIViewController {
     }
     
     private func updateProgress() {
+        progressView.isHidden = false
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
-    }
-    
-    private func configWebView(with urlString: String) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self, let url = URL(string: urlString) else { return }
-            let request = URLRequest(url: url)
-            self.webView.load(request)
-        }
     }
     
     private func addSubViews() {

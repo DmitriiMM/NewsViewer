@@ -1,8 +1,10 @@
 import UIKit
+import WebKit
 
 final class DetailNewsViewController: UIViewController {
     private let news: News
     private let newsStore = NewsStore()
+    private var preloadedWebView: WKWebView?
     
     private lazy var newsImageView: UIImageView = {
         let imageView = UIImageView()
@@ -64,10 +66,24 @@ final class DetailNewsViewController: UIViewController {
         config()
     }
     
+    private func preloadWebView(with urlString: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let url = URL(string: urlString) else { return }
+            let request = URLRequest(url: url)
+            
+            let preloadWebView = WKWebView()
+            preloadWebView.load(request)
+            
+            self.preloadedWebView = preloadWebView
+        }
+    }
+    
     private func config() {
         newsDescription.text = news.content
         newsAuthorLabel.text = news.creator?.joined(separator: ", ")
         newsSourceLinkButton.setTitle(news.link, for: .normal)
+        
+        preloadWebView(with: news.link)
         
         if let imageUrl = news.image {
             loadCover(from: imageUrl)
@@ -91,7 +107,8 @@ final class DetailNewsViewController: UIViewController {
     }
     
     @objc private func newsSourceLinkButtonTapped() {
-        let newsResourceVC = NewsResourceWebViewController(link: news.link)
+        guard let preloadedWebView = preloadedWebView else { return }
+        let newsResourceVC = NewsResourceWebViewController(webView: preloadedWebView)
         navigationController?.pushViewController(newsResourceVC, animated: true)
     }
     
